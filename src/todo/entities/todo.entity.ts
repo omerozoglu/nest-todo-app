@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
 export class Todos {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid', { name: 'uuid' })
   uuid: string;
   @Column({ type: 'varchar', length: 256, name: 'task_name' })
   taskName: string;
@@ -12,8 +12,8 @@ export class Todos {
   priority: string;
   @Column({ type: 'date', name: 'due_date' })
   dueDate: Date;
-  @Column({ type: 'date', name: 'complated_date' })
-  complatedDate: Date;
+  @Column({ type: 'date', name: 'completed_date' })
+  completedDate: Date;
   @Column({ type: 'boolean' })
   status: boolean;
   @Column({ type: 'varchar', length: 256 })
