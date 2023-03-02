@@ -1,8 +1,4 @@
-import { IsOptional, IsUUID } from 'class-validator';
-<<<<<<< HEAD
-import { IsDate } from 'class-validator/types/decorator/typechecker/IsDate';
-=======
->>>>>>> 2d2e0d076d5f1e3509305ad26bba404da3428c61
+import { IsOptional, IsUUID, IsDate } from 'class-validator';
 import { Entity, Column } from 'typeorm';
 
 @Entity()
