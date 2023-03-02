@@ -1,13 +1,8 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  UpdateDateColumn,
-  CreateDateColumn,
-} from 'typeorm';
+import { BaseEntity } from 'src/common/base-entity/base-entity';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity({ name: 'todos' })
-export class Todo {
+export class Todo extends BaseEntity {
   @PrimaryGeneratedColumn('uuid', { name: 'uuid' })
   uuid: string;
   @Column({ type: 'varchar', length: 256, name: 'task_name' })
@@ -32,15 +27,4 @@ export class Todo {
     name: 'created_by',
   })
   createdBy: string;
-  @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-  })
-  createdAt: string;
-  @UpdateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
-  })
-  updatedAt: string;
 }

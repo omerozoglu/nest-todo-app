@@ -8,12 +8,11 @@ import {
   Delete,
 } from '@nestjs/common';
 import { TodoService } from './todo.service';
-import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
-
+import { CreateTodoDto } from './dto/create-todo.dto';
 @Controller('todo')
 export class TodoController {
-  constructor(private readonly todoService: TodoService) { }
+  constructor(private readonly todoService: TodoService) {}
 
   @Post(':id')
   create(@Param('id') id: string, @Body() createTodoDto: CreateTodoDto) {
