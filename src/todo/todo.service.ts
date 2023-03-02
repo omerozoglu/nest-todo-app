@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { GenericResponse } from 'src/common/generic-response/generic-response';
+import { User } from 'src/user/entities/user.entity';
+import { Repository, UpdateResult } from 'typeorm';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { Todo } from './entities/todo.entity';
@@ -10,74 +12,153 @@ export class TodoService {
   @InjectRepository(Todo)
   private readonly repository: Repository<Todo>;
 
-  //TODO Control the user if there is exist or not
-  async createTask(id: string, createTodoDto: CreateTodoDto) {
+  @InjectRepository(User)
+  private readonly userRepo: Repository<Todo>;
+
+  /**
+   *
+   * @param id
+   * @param createTodoDto
+   * @returns {GenericResponse<Todo>}
+   */
+  async createTask(
+    id: string,
+    createTodoDto: CreateTodoDto
+  ): Promise<GenericResponse<Todo>> {
     try {
+      const user = await this.userRepo.findOne({ where: { uuid: id } });
+      if (!user) {
+        return GenericResponse.notFound(null, "User doesn't exist");
+      }
       createTodoDto.createdBy = id;
-      return await this.repository.save(createTodoDto);
+      const response = await this.repository.save(createTodoDto);
+      return GenericResponse.created(response);
     } catch (error) {
-      return { message: error.message };
+      return GenericResponse.internalServerError(error.message);
     }
   }
 
-  async findAllTask() {
+  /**
+   *
+   * @returns {GenericResponse<Todo[]>}
+   */
+  async findAllTask(): Promise<GenericResponse<Todo[]>> {
     try {
-      return await this.repository.find();
+      const response = await this.repository.find();
+      return GenericResponse.success(response);
     } catch (error) {
-      return { message: error.message };
+      return GenericResponse.internalServerError(error.message);
     }
   }
 
-  async findAllCompletedTask() {
+  /**
+   *
+   * @returns {GenericResponse<Todo[]>}
+   */
+  async findAllCompletedTask(): Promise<GenericResponse<Todo[]>> {
     try {
-      return await this.repository.find({ where: { status: true } });
+      const response = await this.repository.find({ where: { status: true } });
+      return GenericResponse.success(response);
     } catch (error) {
-      return { message: error.message };
+      return GenericResponse.internalServerError(error.message);
     }
   }
 
-  async findAllTaskByUserId(id: string) {
+  /**
+   *
+   * @param id
+   * @returns {GenericResponse<Todo>}
+   */
+  async findAllTaskByUserId(id: string): Promise<GenericResponse<Todo[]>> {
     try {
-      return await this.repository.find({ where: { createdBy: id } });
+      const user = await this.userRepo.findOne({ where: { uuid: id } });
+      if (!user) {
+        return GenericResponse.notFound(null, "User doesn't exist");
+      }
+      const response = await this.repository.find({ where: { createdBy: id } });
+      return GenericResponse.success(response);
     } catch (error) {
-      return { message: error.message };
+      return GenericResponse.internalServerError(error.message);
     }
   }
 
-  async findAllCompletedTaskByUserId(id: string) {
+  /**
+   *
+   * @param id
+   * @returns {GenericResponse<Todo[]>}
+   */
+  async findAllCompletedTaskByUserId(
+    id: string
+  ): Promise<GenericResponse<Todo[]>> {
     try {
-      return await this.repository.find({
-        where: { assignedTo: id, status: true },
+      const user = await this.userRepo.findOne({ where: { uuid: id } });
+      if (!user) {
+        return GenericResponse.notFound(null, "User doesn't exist");
+      }
+      const response = await this.repository.find({
+        where: { createdBy: id, status: true },
       });
+      return GenericResponse.success(response);
     } catch (error) {
-      return { message: error.message };
+      return GenericResponse.internalServerError(error.message);
     }
   }
 
-  async findOneTaskById(id: string) {
+  /**
+   *
+   * @param id
+   * @returns  {GenericResponse<Todo>}
+   */
+  async findOneTaskById(id: string): Promise<GenericResponse<Todo>> {
     try {
-      return await this.repository.findOne({ where: { uuid: id } });
+      const response = await this.repository.findOne({ where: { uuid: id } });
+      if (!response) {
+        return GenericResponse.notFound(null, 'Task not found');
+      }
+      return GenericResponse.success(response);
     } catch (error) {
-      return { message: error.message };
+      return GenericResponse.internalServerError(error.message);
     }
   }
 
-  async updateTask(id: string, updateTodoDto: UpdateTodoDto) {
+  /**
+   * ? what should be the return type here?
+   * @param id
+   * @param updateTodoDto
+   * @returns {GenericResponse<UpdateResult>}
+   */
+  async updateTask(
+    id: string,
+    updateTodoDto: UpdateTodoDto
+  ): Promise<GenericResponse<UpdateResult>> {
     try {
       if (updateTodoDto.status) {
         updateTodoDto.completedDate = new Date();
       }
-      return await this.repository.update(id, updateTodoDto);
+      const response = await this.repository.update(id, updateTodoDto);
+      if (response.affected === 0) {
+        return GenericResponse.notFound(null, 'Task not found');
+      }
+      return GenericResponse.success(response, 'Task updated successfully');
     } catch (error) {
-      return { message: error.message };
+      return GenericResponse.internalServerError(error.message);
     }
   }
 
-  async removeTask(id: string) {
+  /**
+   *? what should be the return type here?
+   * @param id
+   * @returns {GenericResponse<UpdateResult>}
+   */
+  async removeTask(id: string): Promise<GenericResponse<UpdateResult>> {
     try {
-      return await this.repository.softDelete(id);
+      const response = await this.repository.softDelete(id);
+      if (response.affected === 0) {
+        return GenericResponse.notFound(null, 'Task not found');
+      }
+      return GenericResponse.success(response, 'Task deleted successfully');
     } catch (error) {
-      return { message: error.message };
+      return GenericResponse.internalServerError(error.message);
     }
   }
 }
