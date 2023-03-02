@@ -11,7 +11,17 @@ export class UserService {
   private readonly repository: Repository<User>;
 
   async createUser(createUserDto: CreateUserDto) {
-    return this.repository.save(createUserDto);
+    try {
+      const user = await this.repository.findOne({
+        where: { email: createUserDto.email },
+      });
+      if (user) {
+        return { message: 'User already exists' };
+      }
+      return await this.repository.save(createUserDto);
+    } catch (error) {
+      return { message: 'Error creating user' };
+    }
   }
 
   async findAllUser() {
