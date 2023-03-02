@@ -16,4 +16,12 @@ export class CreateTodoDto {
   status: boolean;
   @Column({ type: 'varchar', length: 256 })
   category: string;
+  @Column({ type: 'varchar', length: 256, name: 'assigned_to' })
+  assignedTo: string;
+  @Column({
+    type: 'varchar',
+    length: 256,
+    name: 'created_by',
+  })
+  createdBy: string;
 }

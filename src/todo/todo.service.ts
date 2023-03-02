@@ -10,7 +10,8 @@ export class TodoService {
   @InjectRepository(Todo)
   private readonly repository: Repository<Todo>;
 
-  async createTask(createTodoDto: CreateTodoDto) {
+  async createTask(id: string, createTodoDto: CreateTodoDto) {
+    createTodoDto.createdBy = id;
     return await this.repository.save(createTodoDto);
   }
 

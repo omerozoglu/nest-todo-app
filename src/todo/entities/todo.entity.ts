@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  UpdateDateColumn,
+  CreateDateColumn,
+} from 'typeorm';
 
 @Entity({ name: 'todos' })
 export class Todo {
@@ -18,4 +24,23 @@ export class Todo {
   status: boolean;
   @Column({ type: 'varchar', length: 256 })
   category: string;
+  @Column({ type: 'varchar', length: 256, name: 'assigned_to' })
+  assignedTo: string;
+  @Column({
+    type: 'varchar',
+    length: 256,
+    name: 'created_by',
+  })
+  createdBy: string;
+  @CreateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+  })
+  createdAt: string;
+  @UpdateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    onUpdate: 'CURRENT_TIMESTAMP(6)',
+  })
+  updatedAt: string;
 }

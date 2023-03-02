@@ -15,9 +15,9 @@ import { UpdateTodoDto } from './dto/update-todo.dto';
 export class TodoController {
   constructor(private readonly todoService: TodoService) { }
 
-  @Post()
-  create(@Body() createTodoDto: CreateTodoDto) {
-    return this.todoService.createTask(createTodoDto);
+  @Post(':id')
+  create(@Param('id') id: string, @Body() createTodoDto: CreateTodoDto) {
+    return this.todoService.createTask(id, createTodoDto);
   }
 
   @Get()
