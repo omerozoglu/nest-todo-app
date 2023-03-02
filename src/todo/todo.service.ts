@@ -47,7 +47,7 @@ export class TodoService {
   async findAllCompletedTaskByUserId(id: string) {
     try {
       return await this.repository.find({
-        where: { createdBy: id, status: true },
+        where: { assignedTo: id, status: true },
       });
     } catch (error) {
       return { message: error.message };
