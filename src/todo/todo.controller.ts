@@ -24,9 +24,24 @@ export class TodoController {
     return this.todoService.findAllTask();
   }
 
+  @Get('completed')
+  findAllCompleted() {
+    return this.todoService.findAllCompletedTask();
+  }
+
+  @Get('user/completed/:id')
+  findAllCompletedByUserId(@Param('id') id: string) {
+    return this.todoService.findAllCompletedTaskByUserId(id);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.todoService.findOneTaskById(id);
+  }
+
+  @Get('user/:id')
+  findAllByUserId(@Param('id') id: string) {
+    return this.todoService.findAllTaskByUserId(id);
   }
 
   @Patch(':id')
