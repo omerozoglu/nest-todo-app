@@ -13,30 +13,30 @@ import { UpdateTodoDto } from './dto/update-todo.dto';
 
 @Controller('todo')
 export class TodoController {
-  constructor(private readonly todoService: TodoService) {}
+  constructor(private readonly todoService: TodoService) { }
 
   @Post()
   create(@Body() createTodoDto: CreateTodoDto) {
-    return this.todoService.create(createTodoDto);
+    return this.todoService.createTask(createTodoDto);
   }
 
   @Get()
   findAll() {
-    return this.todoService.findAll();
+    return this.todoService.findAllTask();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.todoService.findOne(+id);
+    return this.todoService.findOneTask(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTodoDto: UpdateTodoDto) {
-    return this.todoService.update(+id, updateTodoDto);
+    return this.todoService.updateTask(id, updateTodoDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.todoService.remove(+id);
+    return this.todoService.removeTask(id);
   }
 }

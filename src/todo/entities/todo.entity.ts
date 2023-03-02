@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Entity()
-export class Todos {
+@Entity({ name: 'todos' })
+export class Todo {
   @PrimaryGeneratedColumn('uuid', { name: 'uuid' })
   uuid: string;
   @Column({ type: 'varchar', length: 256, name: 'task_name' })
