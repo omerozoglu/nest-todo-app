@@ -5,10 +5,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TodoModule } from './todo/todo.module';
 import { UserModule } from './user/user.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
-    TodoModule,
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -24,9 +24,11 @@ import { UserModule } from './user/user.module';
       }),
       inject: [ConfigService],
     }),
+    TodoModule,
     UserModule,
+    CommonModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}
