@@ -1,5 +1,9 @@
-import { IsEmail, IsNotEmpty, IsStrongPassword } from 'class-validator';
-import { IsOptional } from 'class-validator/types/decorator/common/IsOptional';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsStrongPassword,
+  IsOptional,
+} from 'class-validator';
 import { Entity, Column } from 'typeorm';
 
 @Entity()

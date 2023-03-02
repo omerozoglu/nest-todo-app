@@ -50,7 +50,7 @@ export class UserService {
 
   async removeUser(id: string) {
     try {
-      return await this.repository.delete(id);
+      return await this.repository.softDelete(id);
     } catch (error) {
       return { message: error.message };
     }
