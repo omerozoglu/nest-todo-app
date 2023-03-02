@@ -14,11 +14,11 @@ export class TodoService {
     return await this.repository.save(createTodoDto);
   }
 
-  async findAllTask(): Promise<Todo[]> {
+  async findAllTask() {
     return await this.repository.find();
   }
 
-  async findOneTask(id: string) {
+  async findOneTaskById(id: string) {
     return await this.repository.findOne({ where: { uuid: id } });
   }
 
