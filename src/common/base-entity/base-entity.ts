@@ -12,7 +12,6 @@ export class BaseEntity {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   updatedAt: Date;
-
   @DeleteDateColumn({ type: 'timestamp', nullable: true })
   deletedAt: Date;
 }
