@@ -11,22 +11,48 @@ export class UserService {
   private readonly repository: Repository<User>;
 
   async createUser(createUserDto: CreateUserDto) {
-    return this.repository.save(createUserDto);
+    try {
+      const user = await this.repository.findOne({
+        where: { email: createUserDto.email },
+      });
+      if (user) {
+        return { message: 'User already exists' };
+      }
+      return await this.repository.save(createUserDto);
+    } catch (error) {
+      return { message: 'Error creating user' };
+    }
   }
 
   async findAllUser() {
-    return await this.repository.find();
+    try {
+      return await this.repository.find();
+    } catch (error) {
+      return { message: error.message };
+    }
   }
 
   async findOneUserById(id: string) {
-    return await this.repository.findOne({ where: { uuid: id } });
+    try {
+      return await this.repository.findOne({ where: { uuid: id } });
+    } catch (error) {
+      return { message: error.message };
+    }
   }
 
   async updateUser(id: string, updateUserDto: UpdateUserDto) {
-    return await this.repository.update(id, updateUserDto);
+    try {
+      return await this.repository.update(id, updateUserDto);
+    } catch (error) {
+      return { message: error.message };
+    }
   }
 
   async removeUser(id: string) {
-    return await this.repository.delete(id);
+    try {
+      return await this.repository.delete(id);
+    } catch (error) {
+      return { message: error.message };
+    }
   }
 }
