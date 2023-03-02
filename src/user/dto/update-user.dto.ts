@@ -1,10 +1,18 @@
+import { IsOptional, IsStrongPassword } from 'class-validator';
 import { Entity, Column } from 'typeorm';
 
 @Entity()
 export class UpdateUserDto {
-    @Column({ type: 'varchar', length: 255 })
-    name: string;
+  @IsOptional()
+  @Column({ type: 'varchar', length: 255 })
+  name: string;
 
-    @Column({ type: 'varchar', length: 255 })
-    password: string;
+  @IsStrongPassword({
+    minLength: 8,
+    minLowercase: 1,
+    minUppercase: 1,
+    // minNumbers: 1,
+  })
+  @Column({ type: 'varchar', length: 255 })
+  password: string;
 }
