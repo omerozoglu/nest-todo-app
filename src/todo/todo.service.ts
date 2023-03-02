@@ -11,23 +11,43 @@ export class TodoService {
   private readonly repository: Repository<Todo>;
 
   async createTask(id: string, createTodoDto: CreateTodoDto) {
-    createTodoDto.createdBy = id;
-    return await this.repository.save(createTodoDto);
+    try {
+      createTodoDto.createdBy = id;
+      return await this.repository.save(createTodoDto);
+    } catch (error) {
+      return { message: error.message };
+    }
   }
 
   async findAllTask() {
-    return await this.repository.find();
+    try {
+      return await this.repository.find();
+    } catch (error) {
+      return { message: error.message };
+    }
   }
 
   async findOneTaskById(id: string) {
-    return await this.repository.findOne({ where: { uuid: id } });
+    try {
+      return await this.repository.findOne({ where: { uuid: id } });
+    } catch (error) {
+      return { message: error.message };
+    }
   }
 
   async updateTask(id: string, updateTodoDto: UpdateTodoDto) {
-    return await this.repository.update(id, updateTodoDto);
+    try {
+      return await this.repository.update(id, updateTodoDto);
+    } catch (error) {
+      return { message: error.message };
+    }
   }
 
   async removeTask(id: string) {
-    return await this.repository.delete(id);
+    try {
+      return await this.repository.delete(id);
+    } catch (error) {
+      return { message: error.message };
+    }
   }
 }
