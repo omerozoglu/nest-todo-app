@@ -7,6 +7,7 @@ export class UpdateUserDto {
   @Column({ type: 'varchar', length: 255 })
   name: string;
 
+  @IsOptional()
   @IsStrongPassword({
     minLength: 8,
     minLowercase: 1,
