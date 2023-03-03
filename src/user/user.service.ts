@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { GenericResponse } from 'src/common/generic-response/generic-response';
+import { Repository, UpdateResult } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -10,49 +11,96 @@ export class UserService {
   @InjectRepository(User)
   private readonly repository: Repository<User>;
 
-  async createUser(createUserDto: CreateUserDto) {
+  /**
+   *
+   * @param createUserDto
+   * @returns {Promise<GenericResponse<User>>}
+   */
+  async createUser(
+    createUserDto: CreateUserDto
+  ): Promise<GenericResponse<User>> {
     try {
       const user = await this.repository.findOne({
         where: { email: createUserDto.email },
       });
       if (user) {
-        return { message: 'User already exists' };
+        return GenericResponse.notAcceptable(null, 'User already exist');
       }
-      return await this.repository.save(createUserDto);
+      const response = await this.repository.save(createUserDto);
+      return GenericResponse.created(response);
     } catch (error) {
-      return { message: 'Error creating user' };
+      return GenericResponse.internalServerError(error.message);
     }
   }
 
-  async findAllUser() {
+  /**
+   *
+   * @returns {Promise<GenericResponse<User[]>>}
+   */
+  async findAllUser(): Promise<GenericResponse<User[]>> {
     try {
-      return await this.repository.find();
+      const response = await this.repository.find();
+      return GenericResponse.success(response);
     } catch (error) {
-      return { message: error.message };
+      return GenericResponse.internalServerError(error.message);
     }
   }
 
-  async findOneUserById(id: string) {
+  /**
+   *
+   * @param id
+   * @returns {Promise<GenericResponse<User>>}
+   */
+  async findOneUserById(id: string): Promise<GenericResponse<User>> {
     try {
-      return await this.repository.findOne({ where: { uuid: id } });
+      const user = await this.repository.findOne({ where: { uuid: id } });
+      if (!user) {
+        return GenericResponse.notFound(null, 'User not found');
+      }
+      return GenericResponse.success(user);
     } catch (error) {
-      return { message: error.message };
+      return GenericResponse.internalServerError(error.message);
     }
   }
 
-  async updateUser(id: string, updateUserDto: UpdateUserDto) {
+  //Type Orm generic type
+  /**
+   * ? what should be the return type here?
+   * @param id
+   * @param updateUserDto
+   * @returns  {Promise<GenericResponse<UpdateResult>>}
+   */
+  async updateUser(
+    id: string,
+    updateUserDto: UpdateUserDto
+  ): Promise<GenericResponse<UpdateResult>> {
     try {
-      return await this.repository.update(id, updateUserDto);
+      const user = await this.repository.findOne({ where: { uuid: id } });
+      if (!user) {
+        return GenericResponse.notFound(null, 'User not found');
+      }
+      const response = await this.repository.update(id, updateUserDto);
+      return GenericResponse.success(response);
     } catch (error) {
-      return { message: error.message };
+      return GenericResponse.internalServerError(error.message);
     }
   }
 
+  /**
+   * ? what should be the return type here?
+   * @param id
+   * @returns {Promise<GenericResponse<UpdateResult>>}
+   */
   async removeUser(id: string) {
     try {
-      return await this.repository.softDelete(id);
+      const user = await this.repository.findOne({ where: { uuid: id } });
+      if (!user) {
+        return GenericResponse.notFound(null, 'User not found');
+      }
+      const response = await this.repository.softDelete(id);
+      return GenericResponse.success(response);
     } catch (error) {
-      return { message: error.message };
+      return GenericResponse.internalServerError(error.message);
     }
   }
 }

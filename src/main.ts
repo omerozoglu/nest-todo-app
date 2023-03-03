@@ -2,6 +2,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
+// TODO: Create category and priority enums
 /**
  * The bootstrap() function is the entry point to the application.
  */
