@@ -10,13 +10,17 @@ import {
 import { TodoService } from './todo.service';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { CreateTodoDto } from './dto/create-todo.dto';
+import { UseFilters } from '@nestjs/common/decorators';
+import { HttpExceptionFilter } from 'src/common/http-exception/http-exception.filter';
+
 @Controller('todo')
+@UseFilters(HttpExceptionFilter)
 export class TodoController {
   constructor(private readonly todoService: TodoService) {}
-
+  v = 0;
   @Post(':id')
-  create(@Param('id') id: string, @Body() createTodoDto: CreateTodoDto) {
-    return this.todoService.createTask(id, createTodoDto);
+  async create(@Param('id') id: string, @Body() createTodoDto: CreateTodoDto) {
+    return await this.todoService.createTask(id, createTodoDto);
   }
 
   @Get()

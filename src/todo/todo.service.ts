@@ -25,17 +25,11 @@ export class TodoService {
     id: string,
     createTodoDto: CreateTodoDto
   ): Promise<GenericResponse<Todo>> {
-    try {
-      const user = await this.userRepo.findOne({ where: { uuid: id } });
-      if (!user) {
-        return GenericResponse.notFound(null, "User doesn't exist");
-      }
-      createTodoDto.createdBy = id;
-      const response = await this.repository.save(createTodoDto);
-      return GenericResponse.created(response);
-    } catch (error) {
-      return GenericResponse.internalServerError(error.message);
-    }
+    const user = await this.userRepo.findOne({ where: { uuid: id } });
+    if (!user) throw GenericResponse.notFound(null, "User doesn't exist");
+    createTodoDto.createdBy = id;
+    const response = await this.repository.save(createTodoDto);
+    return GenericResponse.created(response);
   }
 
   /**
@@ -43,12 +37,8 @@ export class TodoService {
    * @returns {GenericResponse<Todo[]>}
    */
   async findAllTask(): Promise<GenericResponse<Todo[]>> {
-    try {
-      const response = await this.repository.find();
-      return GenericResponse.success(response);
-    } catch (error) {
-      return GenericResponse.internalServerError(error.message);
-    }
+    const response = await this.repository.find();
+    return GenericResponse.success(response);
   }
 
   /**
@@ -56,12 +46,8 @@ export class TodoService {
    * @returns {GenericResponse<Todo[]>}
    */
   async findAllCompletedTask(): Promise<GenericResponse<Todo[]>> {
-    try {
-      const response = await this.repository.find({ where: { status: true } });
-      return GenericResponse.success(response);
-    } catch (error) {
-      return GenericResponse.internalServerError(error.message);
-    }
+    const response = await this.repository.find({ where: { status: true } });
+    return GenericResponse.success(response);
   }
 
   /**
@@ -70,16 +56,12 @@ export class TodoService {
    * @returns {GenericResponse<Todo>}
    */
   async findAllTaskByUserId(id: string): Promise<GenericResponse<Todo[]>> {
-    try {
-      const user = await this.userRepo.findOne({ where: { uuid: id } });
-      if (!user) {
-        return GenericResponse.notFound(null, "User doesn't exist");
-      }
-      const response = await this.repository.find({ where: { createdBy: id } });
-      return GenericResponse.success(response);
-    } catch (error) {
-      return GenericResponse.internalServerError(error.message);
+    const user = await this.userRepo.findOne({ where: { uuid: id } });
+    if (!user) {
+      throw GenericResponse.notFound(null, "User doesn't exist");
     }
+    const response = await this.repository.find({ where: { createdBy: id } });
+    return GenericResponse.success(response);
   }
 
   /**
@@ -90,18 +72,14 @@ export class TodoService {
   async findAllCompletedTaskByUserId(
     id: string
   ): Promise<GenericResponse<Todo[]>> {
-    try {
-      const user = await this.userRepo.findOne({ where: { uuid: id } });
-      if (!user) {
-        return GenericResponse.notFound(null, "User doesn't exist");
-      }
-      const response = await this.repository.find({
-        where: { createdBy: id, status: true },
-      });
-      return GenericResponse.success(response);
-    } catch (error) {
-      return GenericResponse.internalServerError(error.message);
+    const user = await this.userRepo.findOne({ where: { uuid: id } });
+    if (!user) {
+      throw GenericResponse.notFound(null, "User doesn't exist");
     }
+    const response = await this.repository.find({
+      where: { createdBy: id, status: true },
+    });
+    return GenericResponse.success(response);
   }
 
   /**
@@ -110,15 +88,11 @@ export class TodoService {
    * @returns  {GenericResponse<Todo>}
    */
   async findOneTaskById(id: string): Promise<GenericResponse<Todo>> {
-    try {
-      const response = await this.repository.findOne({ where: { uuid: id } });
-      if (!response) {
-        return GenericResponse.notFound(null, 'Task not found');
-      }
-      return GenericResponse.success(response);
-    } catch (error) {
-      return GenericResponse.internalServerError(error.message);
+    const response = await this.repository.findOne({ where: { uuid: id } });
+    if (!response) {
+      throw GenericResponse.notFound(null, 'Task not found');
     }
+    return GenericResponse.success(response);
   }
 
   /**
@@ -131,18 +105,14 @@ export class TodoService {
     id: string,
     updateTodoDto: UpdateTodoDto
   ): Promise<GenericResponse<UpdateResult>> {
-    try {
-      if (updateTodoDto.status) {
-        updateTodoDto.completedDate = new Date();
-      }
-      const response = await this.repository.update(id, updateTodoDto);
-      if (response.affected === 0) {
-        return GenericResponse.notFound(null, 'Task not found');
-      }
-      return GenericResponse.success(response, 'Task updated successfully');
-    } catch (error) {
-      return GenericResponse.internalServerError(error.message);
+    if (updateTodoDto.status) {
+      updateTodoDto.completedDate = new Date();
     }
+    const response = await this.repository.update(id, updateTodoDto);
+    if (response.affected === 0) {
+      throw GenericResponse.notFound(null, 'Task not found');
+    }
+    return GenericResponse.success(response, 'Task updated successfully');
   }
 
   /**
@@ -151,14 +121,10 @@ export class TodoService {
    * @returns {GenericResponse<UpdateResult>}
    */
   async removeTask(id: string): Promise<GenericResponse<UpdateResult>> {
-    try {
-      const response = await this.repository.softDelete(id);
-      if (response.affected === 0) {
-        return GenericResponse.notFound(null, 'Task not found');
-      }
-      return GenericResponse.success(response, 'Task deleted successfully');
-    } catch (error) {
-      return GenericResponse.internalServerError(error.message);
+    const response = await this.repository.softDelete(id);
+    if (response.affected === 0) {
+      throw GenericResponse.notFound(null, 'Task not found');
     }
+    return GenericResponse.success(response, 'Task deleted successfully');
   }
 }
