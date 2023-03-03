@@ -96,7 +96,7 @@ export class TodoService {
   }
 
   /**
-   * ? what should be the return type here?
+   *
    * @param id
    * @param updateTodoDto
    * @returns {GenericResponse<UpdateResult>}
@@ -112,11 +112,12 @@ export class TodoService {
     if (response.affected === 0) {
       throw GenericResponse.notFound(null, 'Task not found');
     }
-    return GenericResponse.success(response, 'Task updated successfully');
+    const updatedTask = await this.repository.findOne({ where: { uuid: id } });
+    return GenericResponse.success(updatedTask, 'Task updated successfully');
   }
 
   /**
-   *? what should be the return type here?
+   *
    * @param id
    * @returns {GenericResponse<UpdateResult>}
    */

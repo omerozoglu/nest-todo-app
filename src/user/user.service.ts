@@ -53,7 +53,7 @@ export class UserService {
 
   //Type Orm generic type
   /**
-   * ? what should be the return type here?
+   *
    * @param id
    * @param updateUserDto
    * @returns  {Promise<GenericResponse<UpdateResult>>}
@@ -62,8 +62,8 @@ export class UserService {
     id: string,
     updateUserDto: UpdateUserDto
   ): Promise<GenericResponse<UpdateResult>> {
-    const user = await this.repository.findOne({ where: { uuid: id } });
-    if (!user) {
+    const isUserExist = await this.repository.exist({ where: { uuid: id } });
+    if (!isUserExist) {
       throw GenericResponse.notFound(null, 'User not found');
     }
     const response = await this.repository.update(id, updateUserDto);
@@ -71,7 +71,7 @@ export class UserService {
   }
 
   /**
-   * ? what should be the return type here?
+   *
    * @param id
    * @returns {Promise<GenericResponse<UpdateResult>>}
    */
