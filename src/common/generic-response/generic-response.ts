@@ -55,7 +55,29 @@ export class GenericResponse<T> {
    * @param status
    * @returns {GenericResponse<T>}
    */
+  static badRequest<T>(data: T, message = 'bad request', status = 400) {
+    return new GenericResponse(data, message, status);
+  }
+
+  /**
+   *
+   * @param data
+   * @param message
+   * @param status
+   * @returns {GenericResponse<T>}
+   */
   static notFound<T>(data: T, message = 'not found', status = 404) {
+    return new GenericResponse(data, message, status);
+  }
+
+  /**
+   *
+   * @param data
+   * @param message
+   * @param status
+   * @returns {GenericResponse<T>}
+   */
+  static notAcceptable<T>(data: T, message = 'not acceptable', status = 406) {
     return new GenericResponse(data, message, status);
   }
 
