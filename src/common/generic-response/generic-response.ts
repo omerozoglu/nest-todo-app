@@ -1,21 +1,15 @@
-import { HttpStatus } from '@nestjs/common';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
-export class GenericResponse<T> {
-  data: T;
-  message: string;
-  status: number;
-  error?: any;
+export class GenericResponse<T> extends HttpException {
   /**
    *
    * @param data
    * @param message
    * @param status
    */
-  constructor(data: T, message: string, status: number, error?: any) {
-    this.data = data;
+  constructor(data: T, message: string, status: number) {
+    super(data, status);
     this.message = message;
-    this.status = status;
-    this.error = error;
   }
 
   /**
