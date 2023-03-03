@@ -19,18 +19,14 @@ export class UserService {
   async createUser(
     createUserDto: CreateUserDto
   ): Promise<GenericResponse<User>> {
-    try {
-      const user = await this.repository.findOne({
-        where: { email: createUserDto.email },
-      });
-      if (user) {
-        return GenericResponse.notAcceptable(null, 'User already exist');
-      }
-      const response = await this.repository.save(createUserDto);
-      return GenericResponse.created(response);
-    } catch (error) {
-      return GenericResponse.internalServerError(error.message);
+    const user = await this.repository.findOne({
+      where: { email: createUserDto.email },
+    });
+    if (user) {
+      throw GenericResponse.notAcceptable(null, 'User already exist');
     }
+    const response = await this.repository.save(createUserDto);
+    return GenericResponse.created(response);
   }
 
   /**
@@ -38,12 +34,8 @@ export class UserService {
    * @returns {Promise<GenericResponse<User[]>>}
    */
   async findAllUser(): Promise<GenericResponse<User[]>> {
-    try {
-      const response = await this.repository.find();
-      return GenericResponse.success(response);
-    } catch (error) {
-      return GenericResponse.internalServerError(error.message);
-    }
+    const response = await this.repository.find();
+    return GenericResponse.success(response);
   }
 
   /**
@@ -52,15 +44,11 @@ export class UserService {
    * @returns {Promise<GenericResponse<User>>}
    */
   async findOneUserById(id: string): Promise<GenericResponse<User>> {
-    try {
-      const user = await this.repository.findOne({ where: { uuid: id } });
-      if (!user) {
-        return GenericResponse.notFound(null, 'User not found');
-      }
-      return GenericResponse.success(user);
-    } catch (error) {
-      return GenericResponse.internalServerError(error.message);
+    const user = await this.repository.findOne({ where: { uuid: id } });
+    if (!user) {
+      throw GenericResponse.notFound(null, 'User not found');
     }
+    return GenericResponse.success(user);
   }
 
   //Type Orm generic type
@@ -74,16 +62,12 @@ export class UserService {
     id: string,
     updateUserDto: UpdateUserDto
   ): Promise<GenericResponse<UpdateResult>> {
-    try {
-      const user = await this.repository.findOne({ where: { uuid: id } });
-      if (!user) {
-        return GenericResponse.notFound(null, 'User not found');
-      }
-      const response = await this.repository.update(id, updateUserDto);
-      return GenericResponse.success(response);
-    } catch (error) {
-      return GenericResponse.internalServerError(error.message);
+    const user = await this.repository.findOne({ where: { uuid: id } });
+    if (!user) {
+      throw GenericResponse.notFound(null, 'User not found');
     }
+    const response = await this.repository.update(id, updateUserDto);
+    return GenericResponse.success(response);
   }
 
   /**
@@ -92,15 +76,11 @@ export class UserService {
    * @returns {Promise<GenericResponse<UpdateResult>>}
    */
   async removeUser(id: string): Promise<GenericResponse<UpdateResult>> {
-    try {
-      const user = await this.repository.findOne({ where: { uuid: id } });
-      if (!user) {
-        return GenericResponse.notFound(null, 'User not found');
-      }
-      const response = await this.repository.softDelete(id);
-      return GenericResponse.success(response);
-    } catch (error) {
-      return GenericResponse.internalServerError(error.message);
+    const user = await this.repository.findOne({ where: { uuid: id } });
+    if (!user) {
+      throw GenericResponse.notFound(null, 'User not found');
     }
+    const response = await this.repository.softDelete(id);
+    return GenericResponse.success(response);
   }
 }

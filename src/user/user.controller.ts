@@ -1,3 +1,4 @@
+import { UseFilters } from '@nestjs/common/decorators';
 import {
   Controller,
   Get,
@@ -10,8 +11,10 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { HttpExceptionFilter } from 'src/common/http-exception/http-exception.filter';
 
 @Controller('user')
+@UseFilters(HttpExceptionFilter)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
