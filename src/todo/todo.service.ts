@@ -121,7 +121,12 @@ export class TodoService {
    * @returns {GenericResponse<UpdateResult>}
    */
   async removeTask(id: string): Promise<GenericResponse<UpdateResult>> {
+    const IsTaskExist = await this.repository.exist({ where: { uuid: id } });
+    if (!IsTaskExist) {
+      throw GenericResponse.notFound(null, 'Task not found');
+    }
     const response = await this.repository.softDelete(id);
+
     if (response.affected === 0) {
       throw GenericResponse.notFound(null, 'Task not found');
     }

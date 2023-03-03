@@ -76,11 +76,19 @@ export class UserService {
    * @returns {Promise<GenericResponse<UpdateResult>>}
    */
   async removeUser(id: string): Promise<GenericResponse<UpdateResult>> {
-    const user = await this.repository.findOne({ where: { uuid: id } });
-    if (!user) {
+    const isUserExist = await this.repository.exist({
+      where: { uuid: id },
+    });
+
+    if (!isUserExist) {
       throw GenericResponse.notFound(null, 'User not found');
     }
+
     const response = await this.repository.softDelete(id);
+    if (response.affected === 0) {
+      throw GenericResponse.notFound(null, 'User not found');
+    }
+
     return GenericResponse.success(response);
   }
 }
