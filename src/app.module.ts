@@ -5,7 +5,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TodoModule } from './todo/todo.module';
 import { UserModule } from './user/user.module';
-import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -26,7 +25,7 @@ import { CommonModule } from './common/common.module';
     }),
     TodoModule,
     UserModule,
-    CommonModule,
+    //CommonModule,
   ],
   controllers: [AppController],
   providers: [AppService],

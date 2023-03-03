@@ -91,7 +91,7 @@ export class UserService {
    * @param id
    * @returns {Promise<GenericResponse<UpdateResult>>}
    */
-  async removeUser(id: string) {
+  async removeUser(id: string): Promise<GenericResponse<UpdateResult>> {
     try {
       const user = await this.repository.findOne({ where: { uuid: id } });
       if (!user) {

@@ -1,18 +1,21 @@
+import { HttpStatus } from '@nestjs/common';
+
 export class GenericResponse<T> {
   data: T;
   message: string;
   status: number;
-
+  error?: any;
   /**
    *
    * @param data
    * @param message
    * @param status
    */
-  constructor(data: T, message: string, status: number) {
+  constructor(data: T, message: string, status: number, error?: any) {
     this.data = data;
     this.message = message;
     this.status = status;
+    this.error = error;
   }
 
   /**
@@ -25,7 +28,7 @@ export class GenericResponse<T> {
   static success<T>(
     data: T,
     message = 'success',
-    status = 200
+    status = HttpStatus.OK
   ): GenericResponse<T> {
     return new GenericResponse(data, message, status);
   }
@@ -40,7 +43,7 @@ export class GenericResponse<T> {
   static created<T>(
     data: T,
     message = 'created',
-    status = 201
+    status = HttpStatus.CREATED
   ): GenericResponse<T> {
     return new GenericResponse(data, message, status);
   }
@@ -55,7 +58,7 @@ export class GenericResponse<T> {
   static noContent<T>(
     data: T,
     message = 'no content',
-    status = 204
+    status = HttpStatus.NO_CONTENT
   ): GenericResponse<T> {
     return new GenericResponse(data, message, status);
   }
@@ -70,7 +73,7 @@ export class GenericResponse<T> {
   static badRequest<T>(
     data: T,
     message = 'bad request',
-    status = 400
+    status = HttpStatus.BAD_REQUEST
   ): GenericResponse<T> {
     return new GenericResponse(data, message, status);
   }
@@ -85,7 +88,7 @@ export class GenericResponse<T> {
   static notFound<T>(
     data: T,
     message = 'not found',
-    status = 404
+    status = HttpStatus.NOT_FOUND
   ): GenericResponse<T> {
     return new GenericResponse(data, message, status);
   }
@@ -100,7 +103,7 @@ export class GenericResponse<T> {
   static notAcceptable<T>(
     data: T,
     message = 'not acceptable',
-    status = 406
+    status = HttpStatus.NOT_ACCEPTABLE
   ): GenericResponse<T> {
     return new GenericResponse(data, message, status);
   }
@@ -115,8 +118,8 @@ export class GenericResponse<T> {
   static internalServerError<T>(
     data: T,
     message = 'internal server error',
-    status = 500
-  ): GenericResponse<T> {
+    status = HttpStatus.INTERNAL_SERVER_ERROR
+  ) {
     return new GenericResponse(data, message, status);
   }
 }
