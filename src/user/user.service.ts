@@ -12,83 +12,80 @@ export class UserService {
   private readonly repository: Repository<User>;
 
   /**
-   *
+   *  Create a new user
    * @param createUserDto
    * @returns {Promise<GenericResponse<User>>}
    */
-  async createUser(
-    createUserDto: CreateUserDto
-  ): Promise<GenericResponse<User>> {
+  async create(createUserDto: CreateUserDto): Promise<GenericResponse<User>> {
     const user = await this.repository.findOne({
       where: { email: createUserDto.email },
     });
     if (user) {
-      throw GenericResponse.notAcceptable(null, 'User already exist');
+      throw GenericResponse.notAcceptable<User>(null, 'User already exist');
     }
     const response = await this.repository.save(createUserDto);
-    return GenericResponse.created(response);
+    return GenericResponse.created<User>(response);
   }
 
   /**
-   *
+   * Find all users
    * @returns {Promise<GenericResponse<User[]>>}
    */
-  async findAllUser(): Promise<GenericResponse<User[]>> {
+  async findAll(): Promise<GenericResponse<User[]>> {
     const response = await this.repository.find();
-    return GenericResponse.success(response);
+    return GenericResponse.success<User[]>(response);
   }
 
   /**
-   *
+   * Find user by id
    * @param id
    * @returns {Promise<GenericResponse<User>>}
    */
-  async findOneUserById(id: string): Promise<GenericResponse<User>> {
+  async findOneById(id: string): Promise<GenericResponse<User>> {
     const user = await this.repository.findOne({ where: { uuid: id } });
     if (!user) {
-      throw GenericResponse.notFound(null, 'User not found');
+      throw GenericResponse.notFound<User>(null, 'User not found');
     }
-    return GenericResponse.success(user);
+    return GenericResponse.success<User>(user);
   }
 
-  //Type Orm generic type
   /**
-   *
+   * Update user
    * @param id
    * @param updateUserDto
    * @returns  {Promise<GenericResponse<UpdateResult>>}
    */
-  async updateUser(
+  async update(
     id: string,
     updateUserDto: UpdateUserDto
   ): Promise<GenericResponse<UpdateResult>> {
     const isUserExist = await this.repository.exist({ where: { uuid: id } });
     if (!isUserExist) {
-      throw GenericResponse.notFound(null, 'User not found');
+      throw GenericResponse.notFound<User>(null, 'User not found');
     }
     const response = await this.repository.update(id, updateUserDto);
-    return GenericResponse.success(response);
+    return GenericResponse.success<UpdateResult>(response);
   }
 
   /**
-   *
+   * Delete user
    * @param id
    * @returns {Promise<GenericResponse<UpdateResult>>}
    */
-  async removeUser(id: string): Promise<GenericResponse<UpdateResult>> {
+  async remove(id: string): Promise<GenericResponse<UpdateResult>> {
     const isUserExist = await this.repository.exist({
       where: { uuid: id },
     });
 
     if (!isUserExist) {
-      throw GenericResponse.notFound(null, 'User not found');
+      throw GenericResponse.notFound<User>(null, 'User not found');
     }
 
     const response = await this.repository.softDelete(id);
     if (response.affected === 0) {
-      throw GenericResponse.notFound(null, 'User not found');
+      throw GenericResponse.notFound<User>(null, 'User not found');
     }
 
-    return GenericResponse.success(response);
+    return GenericResponse.success<UpdateResult>(response);
   }
 }

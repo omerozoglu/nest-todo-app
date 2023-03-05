@@ -16,92 +16,90 @@ export class TodoService {
   private readonly userRepo: Repository<Todo>;
 
   /**
-   *
+   * Create task
    * @param id
    * @param createTodoDto
    * @returns {GenericResponse<Todo>}
    */
-  async createTask(
+  async create(
     id: string,
     createTodoDto: CreateTodoDto
   ): Promise<GenericResponse<Todo>> {
     const user = await this.userRepo.findOne({ where: { uuid: id } });
-    if (!user) throw GenericResponse.notFound(null, "User doesn't exist");
+    if (!user) throw GenericResponse.notFound<User>(null, "User doesn't exist");
     createTodoDto.createdBy = id;
     const response = await this.repository.save(createTodoDto);
-    return GenericResponse.created(response);
+    return GenericResponse.created<Todo>(response);
   }
 
   /**
-   *
+   * Find all task
    * @returns {GenericResponse<Todo[]>}
    */
-  async findAllTask(): Promise<GenericResponse<Todo[]>> {
+  async findAll(): Promise<GenericResponse<Todo[]>> {
     const response = await this.repository.find();
-    return GenericResponse.success(response);
+    return GenericResponse.success<Todo[]>(response);
   }
 
   /**
-   *
+   * Find all completed task
    * @returns {GenericResponse<Todo[]>}
    */
-  async findAllCompletedTask(): Promise<GenericResponse<Todo[]>> {
+  async findAllCompleted(): Promise<GenericResponse<Todo[]>> {
     const response = await this.repository.find({ where: { status: true } });
-    return GenericResponse.success(response);
+    return GenericResponse.success<Todo[]>(response);
   }
 
   /**
-   *
+   * Find all task by user id
    * @param id
    * @returns {GenericResponse<Todo>}
    */
-  async findAllTaskByUserId(id: string): Promise<GenericResponse<Todo[]>> {
-    const user = await this.userRepo.findOne({ where: { uuid: id } });
-    if (!user) {
-      throw GenericResponse.notFound(null, "User doesn't exist");
+  async findAllByUserId(id: string): Promise<GenericResponse<Todo[]>> {
+    const isUserExist = await this.userRepo.exist({ where: { uuid: id } });
+    if (!isUserExist) {
+      throw GenericResponse.notFound<User>(null, "User doesn't exist");
     }
     const response = await this.repository.find({ where: { createdBy: id } });
-    return GenericResponse.success(response);
+    return GenericResponse.success<Todo[]>(response);
   }
 
   /**
-   *
+   * Find all completed task by user id
    * @param id
    * @returns {GenericResponse<Todo[]>}
    */
-  async findAllCompletedTaskByUserId(
-    id: string
-  ): Promise<GenericResponse<Todo[]>> {
-    const user = await this.userRepo.findOne({ where: { uuid: id } });
-    if (!user) {
-      throw GenericResponse.notFound(null, "User doesn't exist");
+  async findAllCompletedByUserId(id: string): Promise<GenericResponse<Todo[]>> {
+    const isUserExist = await this.userRepo.exist({ where: { uuid: id } });
+    if (!isUserExist) {
+      throw GenericResponse.notFound<User>(null, "User doesn't exist");
     }
     const response = await this.repository.find({
       where: { createdBy: id, status: true },
     });
-    return GenericResponse.success(response);
+    return GenericResponse.success<Todo[]>(response);
   }
 
   /**
-   *
+   * Find task by id
    * @param id
    * @returns  {GenericResponse<Todo>}
    */
-  async findOneTaskById(id: string): Promise<GenericResponse<Todo>> {
+  async findOneById(id: string): Promise<GenericResponse<Todo>> {
     const response = await this.repository.findOne({ where: { uuid: id } });
     if (!response) {
-      throw GenericResponse.notFound(null, 'Task not found');
+      throw GenericResponse.notFound<Todo>(null, 'Task not found');
     }
-    return GenericResponse.success(response);
+    return GenericResponse.success<Todo>(response);
   }
 
   /**
-   *
+   * Update task
    * @param id
    * @param updateTodoDto
    * @returns {GenericResponse<UpdateResult>}
    */
-  async updateTask(
+  async update(
     id: string,
     updateTodoDto: UpdateTodoDto
   ): Promise<GenericResponse<UpdateResult>> {
@@ -110,27 +108,33 @@ export class TodoService {
     }
     const response = await this.repository.update(id, updateTodoDto);
     if (response.affected === 0) {
-      throw GenericResponse.notFound(null, 'Task not found');
+      throw GenericResponse.notFound<User>(null, 'Task not found');
     }
     const updatedTask = await this.repository.findOne({ where: { uuid: id } });
-    return GenericResponse.success(updatedTask, 'Task updated successfully');
+    return GenericResponse.success<Todo>(
+      updatedTask,
+      'Task updated successfully'
+    );
   }
 
   /**
-   *
+   * Soft delete
    * @param id
    * @returns {GenericResponse<UpdateResult>}
    */
-  async removeTask(id: string): Promise<GenericResponse<UpdateResult>> {
+  async remove(id: string): Promise<GenericResponse<UpdateResult>> {
     const IsTaskExist = await this.repository.exist({ where: { uuid: id } });
     if (!IsTaskExist) {
-      throw GenericResponse.notFound(null, 'Task not found');
+      throw GenericResponse.notFound<Todo>(null, 'Task not found');
     }
     const response = await this.repository.softDelete(id);
 
     if (response.affected === 0) {
-      throw GenericResponse.notFound(null, 'Task not found');
+      throw GenericResponse.notFound<Todo>(null, 'Task not found');
     }
-    return GenericResponse.success(response, 'Task deleted successfully');
+    return GenericResponse.success<UpdateResult>(
+      response,
+      'Task deleted successfully'
+    );
   }
 }

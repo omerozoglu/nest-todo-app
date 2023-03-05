@@ -17,44 +17,84 @@ import { HttpExceptionFilter } from 'src/common/http-exception/http-exception.fi
 @UseFilters(HttpExceptionFilter)
 export class TodoController {
   constructor(private readonly todoService: TodoService) {}
-  v = 0;
+
+  /**
+   * Create task
+   * @param id
+   * @param createTodoDto
+   * @returns  {GenericResponse<Todo>}
+   */
   @Post(':id')
   async create(@Param('id') id: string, @Body() createTodoDto: CreateTodoDto) {
-    return await this.todoService.createTask(id, createTodoDto);
+    return await this.todoService.create(id, createTodoDto);
   }
 
+  /**
+   * Find all task
+   * @returns {GenericResponse<Todo[]>}
+   */
   @Get()
   findAll() {
-    return this.todoService.findAllTask();
+    return this.todoService.findAll();
   }
 
+  /**
+   * Find all completed task
+   * @returns {GenericResponse<Todo[]>}
+   */
   @Get('completed')
   findAllCompleted() {
-    return this.todoService.findAllCompletedTask();
+    return this.todoService.findAllCompleted();
   }
 
+  /**
+   *  Find all completed task by user id
+   * @param id
+   * @returns {GenericResponse<Todo[]>}
+   */
   @Get('user/completed/:id')
   findAllCompletedByUserId(@Param('id') id: string) {
-    return this.todoService.findAllCompletedTaskByUserId(id);
+    return this.todoService.findAllCompletedByUserId(id);
   }
 
+  /**
+   * Find all task by user id
+   * @param id
+   * @returns {GenericResponse<Todo>}
+   */
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.todoService.findOneTaskById(id);
+    return this.todoService.findOneById(id);
   }
 
+  /**
+   * Find all task by user id
+   * @param id
+   * @returns {GenericResponse<Todo[]>}
+   */
   @Get('user/:id')
   findAllByUserId(@Param('id') id: string) {
-    return this.todoService.findAllTaskByUserId(id);
+    return this.todoService.findAllByUserId(id);
   }
 
+  /**
+   * Update task
+   * @param id
+   * @param updateTodoDto
+   * @returns {GenericResponse<Todo>}
+   */
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTodoDto: UpdateTodoDto) {
-    return this.todoService.updateTask(id, updateTodoDto);
+    return this.todoService.update(id, updateTodoDto);
   }
 
+  /**
+   * Delete task
+   * @param id
+   * @returns {GenericResponse<Todo>}
+   */
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.todoService.removeTask(id);
+    return this.todoService.remove(id);
   }
 }
