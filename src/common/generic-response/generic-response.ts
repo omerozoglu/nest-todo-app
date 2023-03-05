@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 
 export class GenericResponse<T> extends HttpException {
+  data: T;
   /**
    *
    * @param data
@@ -8,7 +9,8 @@ export class GenericResponse<T> extends HttpException {
    * @param status
    */
   constructor(data: T, message: string, status: number) {
-    super(data, status);
+    super(null, status);
+    this.data = data;
     this.message = message;
   }
 

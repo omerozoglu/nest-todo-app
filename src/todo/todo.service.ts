@@ -97,12 +97,12 @@ export class TodoService {
    * Update task
    * @param id
    * @param updateTodoDto
-   * @returns {GenericResponse<UpdateResult>}
+   * @returns {GenericResponse<Todo>}
    */
   async update(
     id: string,
     updateTodoDto: UpdateTodoDto
-  ): Promise<GenericResponse<UpdateResult>> {
+  ): Promise<GenericResponse<Todo>> {
     if (updateTodoDto.status) {
       updateTodoDto.completedDate = new Date();
     }
