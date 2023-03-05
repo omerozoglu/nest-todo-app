@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GenericResponse } from 'src/common/generic-response/generic-response';
 import { Repository, UpdateResult } from 'typeorm';
