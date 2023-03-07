@@ -6,9 +6,9 @@ export class CreateTodoDto {
   @Column({ type: 'varchar', length: 256, name: 'task_name' })
   taskName: string;
   @IsOptional()
-  @Column({ type: 'varchar', length: 256 })
+  @Column({ type: 'varchar', length: 256, name: 'description' })
   description: string;
-  @Column({ type: 'varchar', length: 256 })
+  @Column({ type: 'varchar', length: 256, name: 'priority' })
   priority: string;
   @Column({ type: 'date', name: 'due_date' })
   dueDate: Date;
@@ -18,7 +18,7 @@ export class CreateTodoDto {
   @Column({ type: 'boolean' })
   status: boolean;
   @IsOptional()
-  @Column({ type: 'varchar', length: 256 })
+  @Column({ type: 'varchar', length: 256, name: 'category' })
   category: string;
   @IsOptional()
   @Column({ type: 'varchar', length: 256, name: 'assigned_to' })

@@ -10,10 +10,12 @@ import {
 import { TodoService } from './todo.service';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { CreateTodoDto } from './dto/create-todo.dto';
-import { UseFilters } from '@nestjs/common/decorators';
+import { UseFilters, UseGuards } from '@nestjs/common/decorators';
 import { HttpExceptionFilter } from 'src/common/http-exception/http-exception.filter';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('todo')
+@UseGuards(JwtAuthGuard)
 @UseFilters(HttpExceptionFilter)
 export class TodoController {
   constructor(private readonly todoService: TodoService) {}
@@ -34,8 +36,8 @@ export class TodoController {
    * @returns {GenericResponse<Todo[]>}
    */
   @Get()
-  findAll() {
-    return this.todoService.findAll();
+  async findAll() {
+    return await this.todoService.findAll();
   }
 
   /**
@@ -43,8 +45,8 @@ export class TodoController {
    * @returns {GenericResponse<Todo[]>}
    */
   @Get('completed')
-  findAllCompleted() {
-    return this.todoService.findAllCompleted();
+  async findAllCompleted() {
+    return await this.todoService.findAllCompleted();
   }
 
   /**
@@ -53,8 +55,8 @@ export class TodoController {
    * @returns {GenericResponse<Todo[]>}
    */
   @Get('user/completed/:id')
-  findAllCompletedByUserId(@Param('id') id: string) {
-    return this.todoService.findAllCompletedByUserId(id);
+  async findAllCompletedByUserId(@Param('id') id: string) {
+    return await this.todoService.findAllCompletedByUserId(id);
   }
 
   /**
@@ -63,8 +65,8 @@ export class TodoController {
    * @returns {GenericResponse<Todo>}
    */
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.todoService.findOneById(id);
+  async findOne(@Param('id') id: string) {
+    return await this.todoService.findOneById(id);
   }
 
   /**
@@ -73,8 +75,8 @@ export class TodoController {
    * @returns {GenericResponse<Todo[]>}
    */
   @Get('user/:id')
-  findAllByUserId(@Param('id') id: string) {
-    return this.todoService.findAllByUserId(id);
+  async findAllByUserId(@Param('id') id: string) {
+    return await this.todoService.findAllByUserId(id);
   }
 
   /**
@@ -84,8 +86,8 @@ export class TodoController {
    * @returns {GenericResponse<Todo>}
    */
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTodoDto: UpdateTodoDto) {
-    return this.todoService.update(id, updateTodoDto);
+  async update(@Param('id') id: string, @Body() updateTodoDto: UpdateTodoDto) {
+    return await this.todoService.update(id, updateTodoDto);
   }
 
   /**
@@ -94,7 +96,7 @@ export class TodoController {
    * @returns {GenericResponse<Todo>}
    */
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.todoService.remove(id);
+  async remove(@Param('id') id: string) {
+    return await this.todoService.remove(id);
   }
 }

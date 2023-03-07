@@ -1,10 +1,8 @@
 import { BaseEntity } from 'src/common/base-entity/base-entity';
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, Column } from 'typeorm';
 
 @Entity({ name: 'todos' })
 export class Todo extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid', { name: 'uuid' })
-  uuid: string;
   @Column({ type: 'varchar', length: 256, name: 'task_name' })
   taskName: string;
   @Column({ type: 'varchar', length: 256 })

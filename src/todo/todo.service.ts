@@ -29,7 +29,7 @@ export class TodoService {
     if (!user) throw GenericResponse.notFound<User>(null, "User doesn't exist");
     createTodoDto.createdBy = id;
     const response = await this.repository.save(createTodoDto);
-    return GenericResponse.created<Todo>(response);
+    return GenericResponse.created<Todo>(response, 'Task created');
   }
 
   /**
@@ -38,7 +38,7 @@ export class TodoService {
    */
   async findAll(): Promise<GenericResponse<Todo[]>> {
     const response = await this.repository.find();
-    return GenericResponse.success<Todo[]>(response);
+    return GenericResponse.success<Todo[]>(response, 'Tasks found');
   }
 
   /**
@@ -47,7 +47,7 @@ export class TodoService {
    */
   async findAllCompleted(): Promise<GenericResponse<Todo[]>> {
     const response = await this.repository.find({ where: { status: true } });
-    return GenericResponse.success<Todo[]>(response);
+    return GenericResponse.success<Todo[]>(response, 'Tasks found');
   }
 
   /**
@@ -61,7 +61,7 @@ export class TodoService {
       throw GenericResponse.notFound<User>(null, "User doesn't exist");
     }
     const response = await this.repository.find({ where: { createdBy: id } });
-    return GenericResponse.success<Todo[]>(response);
+    return GenericResponse.success<Todo[]>(response, 'Tasks found');
   }
 
   /**
@@ -77,7 +77,7 @@ export class TodoService {
     const response = await this.repository.find({
       where: { createdBy: id, status: true },
     });
-    return GenericResponse.success<Todo[]>(response);
+    return GenericResponse.success<Todo[]>(response, 'Tasks found');
   }
 
   /**
@@ -90,7 +90,7 @@ export class TodoService {
     if (!response) {
       throw GenericResponse.notFound<Todo>(null, 'Task not found');
     }
-    return GenericResponse.success<Todo>(response);
+    return GenericResponse.success<Todo>(response, 'Task found');
   }
 
   /**

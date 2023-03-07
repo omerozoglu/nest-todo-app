@@ -1,4 +1,4 @@
-import { UseFilters } from '@nestjs/common/decorators';
+import { UseFilters, UseGuards } from '@nestjs/common/decorators';
 import {
   Controller,
   Get,
@@ -12,8 +12,10 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { HttpExceptionFilter } from 'src/common/http-exception/http-exception.filter';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('user')
+@UseGuards(JwtAuthGuard)
 @UseFilters(HttpExceptionFilter)
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -24,8 +26,8 @@ export class UserController {
    * @returns {Promise<GenericResponse<User>>}
    */
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    return await this.userService.create(createUserDto);
   }
 
   /**
@@ -33,8 +35,8 @@ export class UserController {
    * @returns {Promise<GenericResponse<User[]>>}
    */
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  async findAll() {
+    return await this.userService.findAll();
   }
 
   /**
@@ -43,8 +45,8 @@ export class UserController {
    * @returns {Promise<GenericResponse<User>>}
    */
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOneById(id);
+  async findOne(@Param('id') id: string) {
+    return await this.userService.findOneById(id);
   }
 
   /**
@@ -54,8 +56,8 @@ export class UserController {
    * @returns {Promise<GenericResponse<UpdateResult>>}
    */
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(id, updateUserDto);
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return await this.userService.update(id, updateUserDto);
   }
 
   /**
@@ -64,7 +66,7 @@ export class UserController {
    * @returns {Promise<GenericResponse<DeleteResult>>}
    */
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(id);
+  async remove(@Param('id') id: string) {
+    return await this.userService.remove(id);
   }
 }

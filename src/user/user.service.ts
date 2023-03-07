@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GenericResponse } from 'src/common/generic-response/generic-response';
 import { Repository, UpdateResult } from 'typeorm';
@@ -12,7 +12,7 @@ export class UserService {
   private readonly repository: Repository<User>;
 
   /**
-   *  Create a new user
+   * Create a new user
    * @param createUserDto
    * @returns {Promise<GenericResponse<User>>}
    */
@@ -24,7 +24,7 @@ export class UserService {
       throw GenericResponse.notAcceptable<User>(null, 'User already exist');
     }
     const response = await this.repository.save(createUserDto);
-    return GenericResponse.created<User>(response);
+    return GenericResponse.created<User>(response, 'User created');
   }
 
   /**
@@ -33,7 +33,7 @@ export class UserService {
    */
   async findAll(): Promise<GenericResponse<User[]>> {
     const response = await this.repository.find();
-    return GenericResponse.success<User[]>(response);
+    return GenericResponse.success<User[]>(response, 'Users found');
   }
 
   /**
@@ -46,11 +46,24 @@ export class UserService {
     if (!user) {
       throw GenericResponse.notFound<User>(null, 'User not found');
     }
-    return GenericResponse.success<User>(user);
+    return GenericResponse.success<User>(user, 'User found');
   }
 
   /**
-   * Update user
+   * Find user by username
+   * @param username
+   * @returns {Promise<GenericResponse<User>>}
+   */
+  async findOneByUsername(username: string): Promise<GenericResponse<User>> {
+    const user = await this.repository.findOne({ where: { username } });
+    if (!user) {
+      throw GenericResponse.notFound<User>(null, 'User not found');
+    }
+    return GenericResponse.success<User>(user, 'User found');
+  }
+
+  /**
+   * Update user by id
    * @param id
    * @param updateUserDto
    * @returns  {Promise<GenericResponse<UpdateResult>>}
@@ -64,7 +77,7 @@ export class UserService {
       throw GenericResponse.notFound<User>(null, 'User not found');
     }
     const response = await this.repository.update(id, updateUserDto);
-    return GenericResponse.success<UpdateResult>(response);
+    return GenericResponse.success<UpdateResult>(response, 'User updated');
   }
 
   /**
@@ -86,6 +99,6 @@ export class UserService {
       throw GenericResponse.notFound<User>(null, 'User not found');
     }
 
-    return GenericResponse.success<UpdateResult>(response);
+    return GenericResponse.success<UpdateResult>(response, 'User deleted');
   }
 }

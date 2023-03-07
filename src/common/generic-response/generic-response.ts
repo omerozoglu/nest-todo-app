@@ -9,9 +9,8 @@ export class GenericResponse<T> extends HttpException {
    * @param status
    */
   constructor(data: T, message: string, status: number) {
-    super(null, status);
+    super(message, status);
     this.data = data;
-    this.message = message;
   }
 
   /**
@@ -100,6 +99,21 @@ export class GenericResponse<T> extends HttpException {
     data: T,
     message = 'not acceptable',
     status = HttpStatus.NOT_ACCEPTABLE
+  ): GenericResponse<T> {
+    return new GenericResponse(data, message, status);
+  }
+
+  /**
+   *
+   * @param data
+   * @param message
+   * @param status
+   * @returns {GenericResponse<T>}
+   */
+  static unauthorized<T>(
+    data: T,
+    message = 'Invalid credentials',
+    status = HttpStatus.UNAUTHORIZED
   ): GenericResponse<T> {
     return new GenericResponse(data, message, status);
   }
