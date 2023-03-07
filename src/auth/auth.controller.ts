@@ -7,7 +7,7 @@ import {
   UseFilters,
   UseGuards,
 } from '@nestjs/common';
-import { HttpExceptionFilter } from 'src/common/http-exception/http-exception.filter';
+import { HttpExceptionFilter } from 'src/common/filters/http-exception/http-exception.filter';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { Cache } from 'cache-manager';
