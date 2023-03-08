@@ -11,6 +11,7 @@ import { HttpExceptionFilter } from 'src/common/filters/http-exception/http-exce
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { Cache } from 'cache-manager';
+import { GenericResponse } from 'src/common/generic-response/generic-response';
 
 @Controller('auth')
 @UseFilters(HttpExceptionFilter)
@@ -27,7 +28,11 @@ export class AuthController {
    */
   @Post('login')
   @UseGuards(LocalAuthGuard)
-  async login(@Request() req) {
+  async login(@Request() req): Promise<
+    GenericResponse<{
+      access_token: string;
+    }>
+  > {
     // Prepare payload for cache
     const payload = {
       ...req.user,
@@ -35,7 +40,7 @@ export class AuthController {
     };
 
     // Set cache for user data with expire time
-    await this.cacheManager.set('user::' + req.user.username, payload);
+    await this.cacheManager.set('user-' + req.user.username, payload);
 
     // Return JWT token
     return this.authService.login(req.user);
@@ -47,21 +52,19 @@ export class AuthController {
    * @returns {Promise<any>}
    */
   @Post('logout')
-  async logout(@Request() req) {
-    // Get bare token from header
+  async logout(@Request() req): Promise<GenericResponse<string>> {
+    // Get bearer token from header
     const token = req.headers.authorization.split(' ')[1];
 
     const decodedJwt = this.authService.decodeJwt(token);
 
-    await this.cacheManager.set('user-blacklist' + decodedJwt.username, token);
-    // Delete cache for user data
+    // Set cache for user blacklist with token as key
+    await this.cacheManager.set('user-blacklist-' + token, true);
 
-    await this.cacheManager.del('user::' + decodedJwt.username);
+    // Delete cache for user data
+    await this.cacheManager.del('user-' + decodedJwt.username);
 
     // Return success response
-    return {
-      status: 200,
-      message: 'Logout success',
-    };
+    return GenericResponse.success('Logout success');
   }
 }

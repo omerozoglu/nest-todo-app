@@ -36,7 +36,6 @@ export class AuthService {
 
     return GenericResponse.created({
       access_token: this.jwtService.sign(payload),
-      user,
     });
   }
 
