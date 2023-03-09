@@ -13,7 +13,7 @@ import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { Cache } from 'cache-manager';
 import { GenericResponse } from 'src/common/generic-response/generic-response';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { CreateUserDto } from '../user/dto/create-user.dto';
 
 @Controller('auth')
 @UseFilters(HttpExceptionFilter)

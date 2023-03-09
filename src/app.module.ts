@@ -8,12 +8,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TodoModule } from './todo/todo.module';
-import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
 import { redisStore } from 'cache-manager-redis-store';
-import { AuthMiddleware } from './auth/auth.middleware';
 import { RequestMethod } from '@nestjs/common/enums';
+import { TodoModule } from './modules/todo/todo.module';
+import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { AuthMiddleware } from './modules/auth/auth.middleware';
 
 @Module({
   imports: [

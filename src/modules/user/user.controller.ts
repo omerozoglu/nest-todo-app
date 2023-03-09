@@ -12,7 +12,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { HttpExceptionFilter } from 'src/common/filters/http-exception/http-exception.filter';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('user')
 @UseGuards(JwtAuthGuard)

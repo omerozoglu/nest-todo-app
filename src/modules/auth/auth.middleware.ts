@@ -1,4 +1,3 @@
-import { GenericResponse } from './../common/generic-response/generic-response';
 import {
   CACHE_MANAGER,
   Inject,
@@ -6,6 +5,7 @@ import {
   NestMiddleware,
 } from '@nestjs/common';
 import { Cache } from 'cache-manager';
+import { GenericResponse } from 'src/common/generic-response/generic-response';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {

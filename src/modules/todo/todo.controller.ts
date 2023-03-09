@@ -12,7 +12,7 @@ import { UpdateTodoDto } from './dto/update-todo.dto';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UseFilters, UseGuards } from '@nestjs/common/decorators';
 import { HttpExceptionFilter } from 'src/common/filters/http-exception/http-exception.filter';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('todo')
 @UseGuards(JwtAuthGuard)

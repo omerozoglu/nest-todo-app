@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GenericResponse } from 'src/common/generic-response/generic-response';
-import { User } from 'src/user/entities/user.entity';
 import { Repository, UpdateResult } from 'typeorm';
+import { User } from '../user/entities/user.entity';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { Todo } from './entities/todo.entity';

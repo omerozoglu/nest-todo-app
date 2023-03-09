@@ -1,9 +1,9 @@
-import { GenericResponse } from './../common/generic-response/generic-response';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from 'src/user/user.service';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
-import { User } from 'src/user/entities/user.entity';
+import { GenericResponse } from 'src/common/generic-response/generic-response';
+import { CreateUserDto } from '../user/dto/create-user.dto';
+import { User } from '../user/entities/user.entity';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
