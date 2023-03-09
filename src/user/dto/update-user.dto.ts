@@ -12,7 +12,6 @@ export class UpdateUserDto {
     minLength: 8,
     minLowercase: 1,
     minUppercase: 1,
-    // minNumbers: 1,
   })
   @Column({ type: 'varchar', length: 255 })
   password: string;

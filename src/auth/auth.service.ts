@@ -2,6 +2,8 @@ import { GenericResponse } from './../common/generic-response/generic-response';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -40,11 +42,27 @@ export class AuthService {
   }
 
   /**
+   *  Register user and return JWT token
+   */
+  async Register(user: CreateUserDto): Promise<GenericResponse<User>> {
+    const response = await this.userService.create(user);
+    return response;
+  }
+
+  /**
    *  Decode JWT token and return payload
    * @param token
    * @returns  {Promise<any>}
    */
   decodeJwt(token: string) {
     return this.jwtService.verify(token);
+  }
+
+  /**
+   * Logout user
+   * @returns {GenericResponse<User>}
+   */
+  logout(): GenericResponse<string> {
+    return GenericResponse.created('Logout success');
   }
 }

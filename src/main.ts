@@ -8,8 +8,8 @@ import { AllExceptionFilter } from './common/filters/all-exception/all-exception
  */
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalFilters(new AllExceptionFilter());
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalFilters(new AllExceptionFilter()); // This is the global filter for all routes
+  app.useGlobalPipes(new ValidationPipe()); // This is the global pipe for all routes
   await app.listen(3000);
 }
 

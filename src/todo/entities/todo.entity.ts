@@ -3,26 +3,22 @@ import { Entity, Column } from 'typeorm';
 
 @Entity({ name: 'todos' })
 export class Todo extends BaseEntity {
-  @Column({ type: 'varchar', length: 256, name: 'task_name' })
+  @Column({ name: 'task_name' })
   taskName: string;
-  @Column({ type: 'varchar', length: 256 })
+  @Column()
   description: string;
-  @Column({ type: 'varchar', length: 256 })
+  @Column()
   priority: string;
-  @Column({ type: 'date', name: 'due_date' })
+  @Column({ name: 'due_date' })
   dueDate: Date;
-  @Column({ type: 'date', name: 'completed_date' })
+  @Column({ name: 'completed_date' })
   completedDate: Date;
-  @Column({ type: 'boolean' })
+  @Column()
   status: boolean;
-  @Column({ type: 'varchar', length: 256 })
+  @Column()
   category: string;
-  @Column({ type: 'varchar', length: 256, name: 'assigned_to' })
+  @Column({ name: 'assigned_to' })
   assignedTo: string;
-  @Column({
-    type: 'varchar',
-    length: 256,
-    name: 'created_by',
-  })
+  @Column({ name: 'created_by' })
   createdBy: string;
 }

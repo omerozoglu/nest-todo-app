@@ -13,6 +13,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { redisStore } from 'cache-manager-redis-store';
 import { AuthMiddleware } from './auth/auth.middleware';
+import { RequestMethod } from '@nestjs/common/enums';
 
 @Module({
   imports: [
@@ -31,20 +32,26 @@ import { AuthMiddleware } from './auth/auth.middleware';
       }),
       inject: [ConfigService],
     }),
-    TodoModule,
-    UserModule,
-    AuthModule,
     CacheModule.register({
       isGlobal: true,
       store: redisStore as undefined as CacheStore,
       url: process.env.REDIS_URL,
     }),
+    TodoModule,
+    UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes('*');
+    consumer
+      .apply(AuthMiddleware)
+      .exclude(
+        { path: '/auth/login', method: RequestMethod.ALL },
+        { path: '/auth/register', method: RequestMethod.ALL }
+      )
+      .forRoutes('*');
   }
 }

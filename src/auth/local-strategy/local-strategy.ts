@@ -11,7 +11,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   }
 
   /**
-   * Validate user
+   * Validate the user credentials and return the user object if valid credentials are provided. Otherwise, throw an error.
    * @param username
    * @param password
    * @returns {Promise<GenericResponse<any>>}

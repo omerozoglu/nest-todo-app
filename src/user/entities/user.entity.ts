@@ -3,12 +3,12 @@ import { Entity, Column } from 'typeorm';
 
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ nullable: true })
   name: string;
-  @Column({ type: 'varchar', length: 255 })
+  @Column()
   username: string;
-  @Column({ type: 'varchar', length: 255 })
+  @Column()
   email: string;
-  @Column({ type: 'varchar', length: 255 })
+  @Column()
   password: string;
 }

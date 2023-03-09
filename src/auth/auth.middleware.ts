@@ -12,17 +12,13 @@ export class AuthMiddleware implements NestMiddleware {
   constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
 
   async use(req: any, res: any, next: () => void) {
-    if (req.baseUrl === '/auth/login') {
-      next();
-      return;
-    }
     if (!req.headers.authorization) {
       return res
         .status(401)
         .json(GenericResponse.unauthorized('Token is required'));
     }
 
-    const token = req.headers.authorization.split(' ')[1];
+    const token = req.headers.authorization.split(' ')[1]; // Get token from header Authorization Bearer <token>
 
     if (token) {
       const isBlackListed = await this.cacheManager.get(
