@@ -33,6 +33,9 @@ export class UserService {
    */
   async findAll(): Promise<GenericResponse<User[]>> {
     const response = await this.repository.find();
+    if (!response) {
+      throw GenericResponse.notFound<User[]>(null, 'Users not found');
+    }
     return GenericResponse.success<User[]>(response, 'Users found');
   }
 
@@ -95,7 +98,7 @@ export class UserService {
     }
 
     const response = await this.repository.softDelete(id);
-    if (response.affected === 0) {
+    if (!response || response.affected === 0) {
       throw GenericResponse.notFound<User>(null, 'User not found');
     }
 

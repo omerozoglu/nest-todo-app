@@ -14,6 +14,8 @@ import { TodoModule } from './modules/todo/todo.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthMiddleware } from './modules/auth/auth.middleware';
+import { BlogModule } from './modules/blog/blog.module';
+import { LanguageModule } from './modules/language/language.module';
 
 @Module({
   imports: [
@@ -40,6 +42,8 @@ import { AuthMiddleware } from './modules/auth/auth.middleware';
     TodoModule,
     UserModule,
     AuthModule,
+    BlogModule,
+    LanguageModule,
   ],
   controllers: [AppController],
   providers: [AppService],
