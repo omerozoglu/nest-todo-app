@@ -10,9 +10,14 @@ import {
 import { TodoService } from './todo.service';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { CreateTodoDto } from './dto/create-todo.dto';
-import { UseFilters, UseGuards } from '@nestjs/common/decorators';
+import {
+  UseFilters,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common/decorators';
 import { HttpExceptionFilter } from 'src/common/filters/http-exception/http-exception.filter';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { UuidInterceptor } from 'src/common/uuid/uuid.interceptor';
 
 @Controller('todo')
 @UseGuards(JwtAuthGuard)
@@ -50,11 +55,12 @@ export class TodoController {
   }
 
   /**
-   *  Find all completed task by user id
+   * Find all completed task by user id
    * @param id
    * @returns {GenericResponse<Todo[]>}
    */
   @Get('user/completed/:id')
+  @UseInterceptors(UuidInterceptor)
   async findAllCompletedByUserId(@Param('id') id: string) {
     return await this.todoService.findAllCompletedByUserId(id);
   }
@@ -65,6 +71,7 @@ export class TodoController {
    * @returns {GenericResponse<Todo>}
    */
   @Get(':id')
+  @UseInterceptors(UuidInterceptor)
   async findOne(@Param('id') id: string) {
     return await this.todoService.findOneById(id);
   }
@@ -75,6 +82,7 @@ export class TodoController {
    * @returns {GenericResponse<Todo[]>}
    */
   @Get('user/:id')
+  @UseInterceptors(UuidInterceptor)
   async findAllByUserId(@Param('id') id: string) {
     return await this.todoService.findAllByUserId(id);
   }
@@ -86,6 +94,7 @@ export class TodoController {
    * @returns {GenericResponse<Todo>}
    */
   @Patch(':id')
+  @UseInterceptors(UuidInterceptor)
   async update(@Param('id') id: string, @Body() updateTodoDto: UpdateTodoDto) {
     return await this.todoService.update(id, updateTodoDto);
   }
@@ -96,6 +105,7 @@ export class TodoController {
    * @returns {GenericResponse<Todo>}
    */
   @Delete(':id')
+  @UseInterceptors(UuidInterceptor)
   async remove(@Param('id') id: string) {
     return await this.todoService.remove(id);
   }

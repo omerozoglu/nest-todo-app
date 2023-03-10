@@ -8,6 +8,7 @@ import {
   Delete,
   UseFilters,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { LanguageService } from './language.service';
 import { CreateLanguageDto } from './dto/create-language.dto';
@@ -17,6 +18,7 @@ import { HttpExceptionFilter } from 'src/common/filters/http-exception/http-exce
 import { GenericResponse } from 'src/common/generic-response/generic-response';
 import { Language } from './entities/language.entity';
 import { UpdateResult } from 'typeorm';
+import { UuidInterceptor } from 'src/common/uuid/uuid.interceptor';
 
 @Controller('language')
 @UseGuards(JwtAuthGuard)
@@ -51,6 +53,7 @@ export class LanguageController {
    * @returns {GenericResponse<Language>}
    */
   @Get(':id')
+  @UseInterceptors(UuidInterceptor)
   findOne(@Param('id') id: string): Promise<GenericResponse<Language>> {
     return this.languageService.findOneById(id);
   }
@@ -62,6 +65,7 @@ export class LanguageController {
    * @returns {GenericResponse<UpdateResult>}
    */
   @Patch(':id')
+  @UseInterceptors(UuidInterceptor)
   update(
     @Param('id') id: string,
     @Body() updateLanguageDto: UpdateLanguageDto
@@ -75,6 +79,7 @@ export class LanguageController {
    * @returns {GenericResponse<UpdateResult>}
    */
   @Delete(':id')
+  @UseInterceptors(UuidInterceptor)
   remove(@Param('id') id: string): Promise<GenericResponse<UpdateResult>> {
     return this.languageService.remove(id);
   }

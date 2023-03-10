@@ -1,4 +1,8 @@
-import { UseFilters, UseGuards } from '@nestjs/common/decorators';
+import {
+  UseFilters,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common/decorators';
 import {
   Controller,
   Get,
@@ -13,6 +17,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { HttpExceptionFilter } from 'src/common/filters/http-exception/http-exception.filter';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { UuidInterceptor } from 'src/common/uuid/uuid.interceptor';
 
 @Controller('user')
 @UseGuards(JwtAuthGuard)
@@ -45,6 +50,7 @@ export class UserController {
    * @returns {Promise<GenericResponse<User>>}
    */
   @Get(':id')
+  @UseInterceptors(UuidInterceptor)
   async findOne(@Param('id') id: string) {
     return await this.userService.findOneById(id);
   }
@@ -56,6 +62,7 @@ export class UserController {
    * @returns {Promise<GenericResponse<UpdateResult>>}
    */
   @Patch(':id')
+  @UseInterceptors(UuidInterceptor)
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return await this.userService.update(id, updateUserDto);
   }
@@ -66,6 +73,7 @@ export class UserController {
    * @returns {Promise<GenericResponse<DeleteResult>>}
    */
   @Delete(':id')
+  @UseInterceptors(UuidInterceptor)
   async remove(@Param('id') id: string) {
     return await this.userService.remove(id);
   }

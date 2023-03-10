@@ -8,9 +8,11 @@ import {
   Delete,
   UseGuards,
   UseFilters,
+  UseInterceptors,
 } from '@nestjs/common';
 import { HttpExceptionFilter } from 'src/common/filters/http-exception/http-exception.filter';
 import { GenericResponse } from 'src/common/generic-response/generic-response';
+import { UuidInterceptor } from 'src/common/uuid/uuid.interceptor';
 import { UpdateResult } from 'typeorm';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { BlogService } from './blog.service';
@@ -49,6 +51,7 @@ export class BlogController {
    * @returns {Promise<GenericResponse<Blog>>}
    */
   @Get(':id')
+  @UseInterceptors(UuidInterceptor)
   findOne(@Param('id') id: string): Promise<GenericResponse<Blog>> {
     return this.blogService.findOneById(id);
   }
@@ -60,6 +63,7 @@ export class BlogController {
    * @returns {Promise<GenericResponse<UpdateResult>>}
    */
   @Patch(':id')
+  @UseInterceptors(UuidInterceptor)
   update(
     @Param('id') id: string,
     @Body() updateBlogDto: UpdateBlogDto
@@ -73,6 +77,7 @@ export class BlogController {
    * @returns {Promise<GenericResponse<DeleteResult>>}
    */
   @Delete(':id')
+  @UseInterceptors(UuidInterceptor)
   remove(@Param('id') id: string): Promise<GenericResponse<UpdateResult>> {
     return this.blogService.remove(id);
   }
