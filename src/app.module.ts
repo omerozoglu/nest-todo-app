@@ -16,8 +16,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { AuthMiddleware } from './modules/auth/auth.middleware';
 import { BlogModule } from './modules/blog/blog.module';
 import { LanguageModule } from './modules/language/language.module';
-import { APP_INTERCEPTOR } from '@nestjs/core';
-import { UuidInterceptor } from './common/uuid/uuid.interceptor';
+import { MenuModule } from './modules/menu/menu.module';
 
 @Module({
   imports: [
@@ -46,6 +45,7 @@ import { UuidInterceptor } from './common/uuid/uuid.interceptor';
     AuthModule,
     BlogModule,
     LanguageModule,
+    MenuModule,
   ],
   controllers: [AppController],
   providers: [AppService],
