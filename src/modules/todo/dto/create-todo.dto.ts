@@ -1,32 +1,25 @@
 import { IsOptional } from 'class-validator';
 import { Entity, Column } from 'typeorm';
+import { IsUnique } from '../../../common/validators/my-custom.validator';
+import { Todo } from '../entities/todo.entity';
 
-@Entity()
 export class CreateTodoDto {
-  @Column({ type: 'varchar', length: 256, name: 'task_name' })
+  @IsUnique(Todo, 'taskName')
   taskName: string;
   @IsOptional()
-  @Column({ type: 'varchar', length: 256, name: 'description' })
   description: string;
-  @Column({ type: 'varchar', length: 256, name: 'priority' })
+  @IsOptional()
   priority: string;
-  @Column({ type: 'date', name: 'due_date' })
+  @IsOptional()
   dueDate: Date;
   @IsOptional()
-  @Column({ type: 'date', name: 'completed_date' })
   completedDate: Date;
   @Column({ type: 'boolean' })
   status: boolean;
   @IsOptional()
-  @Column({ type: 'varchar', length: 256, name: 'category' })
   category: string;
   @IsOptional()
-  @Column({ type: 'varchar', length: 256, name: 'assigned_to' })
   assignedTo: string;
-  @Column({
-    type: 'varchar',
-    length: 256,
-    name: 'created_by',
-  })
+  @IsOptional()
   createdBy: string;
 }
